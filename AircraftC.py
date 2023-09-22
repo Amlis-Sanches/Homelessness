@@ -9,9 +9,9 @@ pd.set_option('display.max_columns',None)
 
 #importing the data gathered from different websites and goverment documents. I also create an empty data frame
 #file path currently has issues so to fix this issue we use \\. it is also posible to put a r as in df = pd.read_csv(r'C...')
-dfindex = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Python\\Projects\\Cost of living index\cost-of-living-index-by-state-[updated-june-2023].csv')
-dftaxes = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Python\\Projects\\Cost of living index\\State-Individual-Income-Tax-Rates-and-Brackets-2015-2023-fv.csv')
-dfwage = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Python\Projects\\Cost of living index\\Average-Wage-Per-State.csv')
+dfindex = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Homelessness blog post\\BlogPostPHA\\cost-of-living-index-by-state-[updated-june-2023].csv')
+dftaxes = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Homelessness blog post\\BlogPostPHA\\State-Individual-Income-Tax-Rates-and-Brackets-2015-2023-fv.csv')
+dfwage = pd.read_csv('C:\\Users\\natha\\Documents\\Coding\\Homelessness blog post\\BlogPostPHA\Average-Wage-Per-State.csv')
 dfincome = pd.DataFrame(columns=['State','State Rate','Bracket','Income'])
 
 
