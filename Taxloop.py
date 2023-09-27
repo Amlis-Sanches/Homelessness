@@ -1,64 +1,25 @@
-
-#importing packages and data
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-sns.set_theme(color_codes=True)
-pd.set_option('display.max_columns',None)
 
+# Create a DataFrame with your data
+data = {
+    'Month': [0, 1, 2, 3, 4, 5, 6, 7],
+    'Wyoming': [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1.0, 2.0],
+    'Florida': [13451.088382, 10710.942568, 7970.796755, 5230.650942, 2490.505128,
+                -249.640685, 13170.577765, 10149.921335],
+    'New Hampshire': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan],
+    'Nevada': [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
+}
 
-for i in range(0, num_rows):
-    if num_rows == 1:
-        tax_loss = tax_rows
-        rate = tax_row['Single Rate'].iloc[i]
-        bracket = tax_row['Single Bracket'].iloc[i]
-        income = salary_federal - tax_loss
-        break
+df = pd.DataFrame(data)
 
-    elif i == num_rows:
-        test = 0
-    else:
-        test = 0
+# Forward fill NaN values with previous non-null values
+df.ffill(inplace=True)
 
-for i in range(0, num_rows):
-        if tax_row['Single Rate'].iloc[i] == 0:
-            tax_loss = 1
-            rate = tax_row['Single Rate'].iloc[i]
-            bracket = tax_row['Single Bracket'].iloc[i]
-            income = salary_federal - tax_loss
-            break
-        elif tax_row['Single Rate'].iloc[i] != 0 and num_rows == 1:
-            tax_loss = (salary* tax_row['Single Rate'].iloc[i])
-            rate = tax_row['Single Rate'].iloc[i]
-            bracket = tax_row['Single Bracket'].iloc[i]
-            income = salary_federal - tax_loss
-            break
+# Remove rows with NaN values
+df.dropna(inplace=True)
 
-        else:
-            if (salary - tax_row['Single Bracket'].iloc[i]) > 0 and (salary - tax_row['Single Bracket'].shift(-1).iloc[i]) > 0 and i != num_rows:
-                tax_loss = tax_loss + (tax_row['Single Bracket'].shift(-1).iloc[i]* tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-            
-            elif (salary - tax_row['Single Bracket'].iloc[i]) > 0 and (salary - tax_row['Single Bracket'].shift(-1).iloc[i]) < 0 and i != num_rows:
-                tax_loss = tax_loss + ((salary - tax_row['Single Bracket'].shift(+1).iloc[i]) * tax_row['Single Rate'].iloc[i])
-                bracket = tax_row['Single Bracket'].iloc[i]
-                rate = tax_row['Single Rate'].iloc[i]
-                income = salary_federal - tax_loss
-                break
-            
-            elif (salary - tax_row['Single Bracket'].iloc[i]) < 0 and num_rows != 1:
-                tax_loss = tax_loss + ((salary - tax_row['Single Bracket'].shift(+1).iloc[i]) * tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-                break
-            
-            elif (salary - tax_row['Single Bracket'].iloc[i]) > 0 and i == num_rows:
-                tax_loss = tax_loss + (tax_row['Single Bracket'].shift(-1).iloc[i]* tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-                break
+# Reset the index
+df.reset_index(drop=True, inplace=True)
+
+print(df)
