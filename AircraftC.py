@@ -212,8 +212,7 @@ plt.figure(figsize=(10, 6))
 with sns.axes_style("whitegrid"):
     plt.bar(dfincome['State'], dfincome['Income'])  # Use 'Income' directly as the height values
 plt.xlabel('State')
-plt.ylabel('Income')
-plt.title('Income After Taxes')
+plt.ylabel('Income After Taxes')
 
 #adjust the tick markers on the y-axis
 ax = plt.gca()
@@ -233,29 +232,10 @@ plt.figure(figsize=(10, 6))
 with sns.axes_style("whitegrid"):
     sns.barplot(x='State', y='COLindex', data=dfindex, palette=colors)
 plt.xlabel('State')
-
 plt.ylabel('Cost of Living Index')
-plt.title('Cost of Living Index per State')
 
 # Rotate the x-axis labels if needed for better readability
 plt.xticks(rotation=90)
-
-plt.show()
-
-# Income index plot
-dfwageindex = dfwageindex.sort_values(by='Income Index I')
-with sns.axes_style("whitegrid"):
-    sns.lineplot(x='State', y='Income Index I', data=dfwageindex, palette=colors)
-#sns.lineplot(x='State', y='Income Index H', data=dfwageindex)
-
-# Add labels and title
-plt.xlabel('State')
-plt.ylabel('Income Index')
-plt.title('Income Compaired to Average Indipendent Income')
-plt.xticks(rotation=90)
-plt.legend()
-
-# Display the plot
 plt.show()
 
 #---------------====================Finnal state choices
