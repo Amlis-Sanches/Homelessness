@@ -36,7 +36,7 @@ dfwage['Annual Average Wage'] = pd.to_numeric(dfwage['Annual Average Wage'])
 
 #estimate the overall cost for someone from a ship and remove federal taxes
 ship_cost = 12000000000 #Estimated ship cost from goverment
-people = 552830 + ((552830*.2) * 4)
+people = 582462
 salary = ship_cost / people
 #print('your salary is', salary)
 fica = .0765
