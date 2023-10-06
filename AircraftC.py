@@ -185,7 +185,6 @@ monthly_expenses = averagerent + food + utilities + (transportation / 12)
 df_State_Options['Monthly Expenses'] = (df_State_Options['COLindex'] / 100) * monthly_expenses
 df_State_Options['Income'] = max_income
 
-
 df_budget_state = pd.DataFrame()
 
 for state in states_with_max_income:
