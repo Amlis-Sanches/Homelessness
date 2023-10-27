@@ -37,10 +37,10 @@ dfwage['Annual Average Wage'] = pd.to_numeric(dfwage['Annual Average Wage'])
 #estimate the overall cost for someone from a ship and remove federal taxes
 ship_cost = 12000000000 #Estimated ship cost from goverment
 people = 582462
-salary = ship_cost / people
+salary = 120000#ship_cost / people
 #print('your salary is', salary)
 fica = .0765
-federal_tax = .0284
+federal_tax = .1886
 salary_federal = salary - (salary * fica) - (salary * federal_tax)
 print("after federal tax its: ",salary_federal)
 #-------------------------------------------Calculating state specific income
@@ -122,8 +122,8 @@ dfincome = dfincome.sort_values('Income')
 print(dfincome)
 #----------------------------------------------calculate the income index for each state compaired to the national average. 
 #after reviewing this section i will keep this for further information in the future but it is irrelevent
-dfincome = dfincome[dfincome['State'] != 'District Of Columbia']
-dfindex = dfindex[dfindex['State'] != 'District of Columbia']
+#dfincome = dfincome[dfincome['State'] != 'District Of Columbia']
+#dfindex = dfindex[dfindex['State'] != 'District of Columbia']
 dfindex = dfindex.sort_values(by='State')
 dfincome = dfincome.sort_values(by='State')
 dfwageindex = dfincome[['State', 'Income']]
