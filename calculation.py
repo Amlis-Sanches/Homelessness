@@ -38,8 +38,7 @@ dfwage['Annual Average Wage'] = pd.to_numeric(dfwage['Annual Average Wage'])
 #estimate the overall cost for someone from a ship and remove federal taxes
 ship_cost = 12000000000 #Estimated ship cost from goverment
 people = 582462
-salary = 120000#ship_cost / people
-#print('your salary is', salary)
+salary = ship_cost/people
 fica = .0765
 federal_tax = .1886
 salary_federal = salary - (salary * fica) - (salary * federal_tax)
@@ -54,69 +53,9 @@ for state in state_list:
     tax_row = dftaxes[dftaxes['State'] == state]
     tax_row['Single Bracket'] = pd.to_numeric(tax_row['Single Bracket'])
     tax_row['Single Rate'] = pd.to_numeric(tax_row['Single Rate'])
-    num_rows = tax_row.shape[0]
-    tax_loss = 0
-    rate = 0
-    bracket = 0
-    income = 0
-    for i in range(0, num_rows): #go through all the rows that were pulled
-        #If there is a flat rate at which you are taxes in the state, it just applies that tax.
-        if num_rows == 1 and tax_row['Single Rate'].iloc[i] != 0:
-            tax_loss = salary*tax_row['Single Rate'].iloc[i]
-            rate = tax_row['Single Rate'].iloc[i]
-            bracket = tax_row['Single Bracket'].iloc[i]
-            income = salary_federal - tax_loss
-            break
-        
-        #If there is no taxes within the state then just subtract federal income.     
-        elif num_rows == 1 and tax_row['Single Rate'].iloc[i] == 0:
-            #no need for tex_loss equation just make iincome = salary_federal
-            rate = tax_row['Single Rate'].iloc[i]
-            bracket = tax_row['Single Bracket'].iloc[i]
-            income = salary_federal
-            break
-        
-        #--------------------for all states that have mutiple brackets for taxes
-        #if you are at the end of the list for that states taxes
-        elif i == num_rows:
-            #If your salary is smallar for the last value, subtracked all the money at the current bracket that was already taxed and tax whats left (fix)
-            if tax_row['Sinlge Bracket'].iloc[i] < salary:
-                tax_loss = tax_loss + ((salary - tax_row['Single Bracket'].iloc[i])* tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-                break
-            
-            #if you made it to the last bracket and its larger than what you made do nothing ( I think you just need to exit because you already subtracked it so this is just a check incase the loop still is going)
-            else: 
-                #tax_loss = tax_loss + ((salary-tax_row['Single Bracket'].shift(+1).iloc[i])* tax_row['Single Rate'].iloc[i])
-                #rate = tax_row['Single Rate'].iloc[i]
-                #bracket = tax_row['Single Bracket'].iloc[i]
-                #income = salary_federal - tax_loss
-                break
-
-        #-------------if your not at the end of the loop
-        else:
-            #If the bracket your on and the next one are both smallar than the salary, subtracked all the taxed money for that bracket
-            if tax_row['Single Bracket'].iloc[i] < salary and tax_row['Single Bracket'].shift(-1).iloc[i] < salary:
-                tax_loss = tax_loss + (tax_row['Single Bracket'].shift(-1).iloc[i]* tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-
-            #If the bracket your on is the only one your salary exceeds, subtracked from the salary and exit loop
-            elif tax_row['Single Bracket'].iloc[i] < salary and tax_row['Single Bracket'].shift(-1).iloc[i] > salary:
-                tax_loss = tax_loss + ((salary - tax_row['Single Bracket'].iloc[i])* tax_row['Single Rate'].iloc[i])
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-                break
-            
-            else: #else statement for invisible data that seems to occure
-                tax_loss = salary*tax_row['Single Rate'].iloc[i]
-                rate = tax_row['Single Rate'].iloc[i]
-                bracket = tax_row['Single Bracket'].iloc[i]
-                income = salary_federal - tax_loss
-                break
+    
+    stateTax, rate, bracket = tas.taxes(tax_row, 'Single Rate', 'Single Bracket', salary_federal)
+    income = salary_federal - stateTax
     #input found variables into the dfincome data frame
     dfincome = dfincome._append({'State': state,'State Rate': rate ,'Bracket': bracket, 'Income': income}, ignore_index=True)
 dfincome = dfincome.sort_values('Income')
