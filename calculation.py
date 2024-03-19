@@ -7,6 +7,7 @@ import seaborn as sns
 import tax_and_salary as tas
 sns.set_theme(color_codes=True)
 pd.set_option('display.max_columns',None)
+import sys
 
 #importing the data gathered from different websites and goverment documents. I also create an empty data frame
 #file path currently has issues so to fix this issue we use \\. it is also posible to put a r as in df = pd.read_csv(r'C...')
@@ -59,7 +60,7 @@ for state in state_list:
     #input found variables into the dfincome data frame
     dfincome = dfincome._append({'State': state,'State Rate': rate ,'Bracket': bracket, 'Income': income}, ignore_index=True)
 dfincome = dfincome.sort_values('Income')
-print(dfincome)
+dfincome.to_csv('C:\\Users\\natha\\Documents\\Coding\\Homelessness blog post\\BlogPostPHA\\income.csv')
 #----------------------------------------------calculate the income index for each state compaired to the national average. 
 #after reviewing this section i will keep this for further information in the future but it is irrelevent
 #dfincome = dfincome[dfincome['State'] != 'District Of Columbia']
