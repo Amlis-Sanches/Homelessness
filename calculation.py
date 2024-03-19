@@ -18,14 +18,13 @@ dfincome = pd.DataFrame(columns=['State','State Rate','Bracket','Income'])
 
 #--------------------------Edit data file to clean the data
 #--Edit the Tax data for states
-#Edit the single bracket column to remove string items and make it a numerical value
-charlist = ['$']
+#Remove the unneeded characters from the data set in the tax information. 
+charlist = ['$', '%', ',', '"'] #char to remove
+rowlist = ['Single Bracket', 'Single Rate'] #rows to remove from
+dftaxes = tas.df_remove_chars(dftaxes, rowlist, charlist) #created function to modify and replace dftaxes
 
-dftaxes['Single Bracket'] = dftaxes['Single Bracket'].str.replace('$', '')
-dftaxes['Single Bracket'] = dftaxes['Single Bracket'].str.replace(',', '').str.replace('%','')
 dftaxes['Single Bracket'] = pd.to_numeric(dftaxes['Single Bracket'])
 #Edit the Single rate to remove string items and make it a numerical value
-dftaxes['Single Rate'] = dftaxes['Single Rate'].str.replace('%', '')
 dftaxes['Single Rate'] = pd.to_numeric(dftaxes['Single Rate'])
 dftaxes['Single Rate'] = dftaxes['Single Rate']/100
 #Additional eddit
@@ -33,8 +32,7 @@ dftaxes = dftaxes.dropna(subset=['State'])
 
 #------------------------------Edit wage data
 #Remove string items and make a numerical value
-dfwage['Annual Average Wage'] = dfwage['Annual Average Wage'].str.replace('$', '')
-dfwage['Annual Average Wage'] = dfwage['Annual Average Wage'].str.replace(',', '').str.replace('"','')
+dfwage = tas.df_remove_chars(dfwage, ['Annual Average Wage'], charlist) #second item needs to be a list
 dfwage['Annual Average Wage'] = pd.to_numeric(dfwage['Annual Average Wage'])
 
 #estimate the overall cost for someone from a ship and remove federal taxes
@@ -45,7 +43,7 @@ salary = 120000#ship_cost / people
 fica = .0765
 federal_tax = .1886
 salary_federal = salary - (salary * fica) - (salary * federal_tax)
-print("after federal tax its: ",salary_federal)
+
 #-------------------------------------------Calculating state specific income
 #create a list of all the states
 state_list = dftaxes['State'].unique().tolist() #this will review the column names state and find all the unique values. then using tolist it will create a list name state_list
