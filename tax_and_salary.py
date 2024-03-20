@@ -10,23 +10,30 @@ def df_remove_chars(df, rowsname, char_list):
 
 def taxes(df, rate_name, income_name, salary):
     tax_count = 0
+    dfsize = len(df)
     for i in range(len(df)):
+        tax_rate = df[rate_name].iloc[i]
         tax_range = df[income_name].iloc[i]
 
         if i == 1:
-            choice = df[rate_name].iloc[i]
+            match (tax_rate, tax_range, dfsize):
+                case (0, 0, 1):
+                    tax_count = 0
+                    return tax_count, tax_rate, tax_range
 
-            match choice:
-                case 0:
+                case (0, _, _):
                     tax_count = 0
 
-                case _:
-                    tax_count = (((df[rate_name].iloc[i])/100)*(df[income_name].iloc[i]))
+                case (_, 0, 1):
+                    tax_count = ((tax_rate/100)*salary)
+
+                case (_, 0, _):
+                    tax_count = ((tax_rate/100)*df[income_name].iloc[i+1]-1)
 
         if salary > tax_range:
-            tax_count = ((df[rate_name].iloc[i]/100)*(df[income_name].iloc[i]-df[income_name].iloc[i-1]))+tax_count
+            tax_count = ((tax_rate/100)*(tax_range-df[income_name].iloc[i-1]))+tax_count
         
         else:
-            tax_count = ((df[rate_name].iloc[i]/100)*(salary-df[income_name].iloc[i-1]))+tax_count
-            return tax_count, df[rate_name].iloc[i], df[income_name].iloc[i]
-    return tax_count, df[rate_name].iloc[i], df[income_name].iloc[i]
+            #tax_count = ((tax_rate/100)*(salary-df[income_name].iloc[i-1]))+tax_count
+            return tax_count, tax_rate, tax_range
+    return tax_count, tax_rate, tax_range
